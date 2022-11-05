@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{9B8060C4-44FC-2B81-F215-6BA400EB49E2}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "PathTracingRecord",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
