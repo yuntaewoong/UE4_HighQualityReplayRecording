@@ -68,5 +68,21 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	
+
+private:
+	UPROPERTY(Replicated)
+		FTransform m_replicatedCameraTransform;//replay데이터에 저장될 카메라 world space 트랜스폼값
+	
+	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
+		void MulticastUpdate();//replicate데이터를 업데이트
+	void MulticastUpdate_Implementation();
+
+	UFUNCTION(BlueprintCallable)
+		FTransform GetRecordedCameraTransform();
+private:
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;//replicate된 변수등록절차
+
 };
 

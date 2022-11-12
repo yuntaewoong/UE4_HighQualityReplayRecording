@@ -7,6 +7,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "Net/UnrealNetwork.h"
 #include "GameFramework/SpringArmComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
@@ -77,6 +78,7 @@ void APathTracingRecordCharacter::SetupPlayerInputComponent(class UInputComponen
 }
 
 
+
 void APathTracingRecordCharacter::OnResetVR()
 {
 	// If PathTracingRecord is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in PathTracingRecord.Build.cs is not automatically propagated
@@ -137,4 +139,23 @@ void APathTracingRecordCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+
+void APathTracingRecordCharacter::MulticastUpdate_Implementation()
+{
+	m_replicatedCameraTransform = FollowCamera->GetComponentTransform();
+}
+
+FTransform APathTracingRecordCharacter::GetRecordedCameraTransform()
+{
+	return m_replicatedCameraTransform;
+}
+
+void APathTracingRecordCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APathTracingRecordCharacter, m_replicatedCameraTransform);//replicated처리할거라고 등록
+
 }
