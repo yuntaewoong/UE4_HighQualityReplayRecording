@@ -44,6 +44,7 @@ APathTracingRecordCharacter::APathTracingRecordCharacter()
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
+	bReplicates = true;
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named MyCharacter (to avoid direct content references in C++)
 }
@@ -65,52 +66,13 @@ void APathTracingRecordCharacter::SetupPlayerInputComponent(class UInputComponen
 	// "turn" handles devices that provide an absolute delta, such as a mouse.
 	// "turnrate" is for devices that we choose to treat as a rate of change, such as an analog joystick
 	PlayerInputComponent->BindAxis("Turn", this, &APawn::AddControllerYawInput);
-	PlayerInputComponent->BindAxis("TurnRate", this, &APathTracingRecordCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("LookUp", this, &APawn::AddControllerPitchInput);
-	PlayerInputComponent->BindAxis("LookUpRate", this, &APathTracingRecordCharacter::LookUpAtRate);
-
-	// handle touch devices
-	PlayerInputComponent->BindTouch(IE_Pressed, this, &APathTracingRecordCharacter::TouchStarted);
-	PlayerInputComponent->BindTouch(IE_Released, this, &APathTracingRecordCharacter::TouchStopped);
-
-	// VR headset functionality
-	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &APathTracingRecordCharacter::OnResetVR);
 }
 
 
 
-void APathTracingRecordCharacter::OnResetVR()
-{
-	// If PathTracingRecord is added to a project via 'Add Feature' in the Unreal Editor the dependency on HeadMountedDisplay in PathTracingRecord.Build.cs is not automatically propagated
-	// and a linker error will result.
-	// You will need to either:
-	//		Add "HeadMountedDisplay" to [YourProject].Build.cs PublicDependencyModuleNames in order to build successfully (appropriate if supporting VR).
-	// or:
-	//		Comment or delete the call to ResetOrientationAndPosition below (appropriate if not supporting VR)
-	UHeadMountedDisplayFunctionLibrary::ResetOrientationAndPosition();
-}
 
-void APathTracingRecordCharacter::TouchStarted(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		Jump();
-}
 
-void APathTracingRecordCharacter::TouchStopped(ETouchIndex::Type FingerIndex, FVector Location)
-{
-		StopJumping();
-}
-
-void APathTracingRecordCharacter::TurnAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerYawInput(Rate * BaseTurnRate * GetWorld()->GetDeltaSeconds());
-}
-
-void APathTracingRecordCharacter::LookUpAtRate(float Rate)
-{
-	// calculate delta for this frame from the rate information
-	AddControllerPitchInput(Rate * BaseLookUpRate * GetWorld()->GetDeltaSeconds());
-}
 
 void APathTracingRecordCharacter::MoveForward(float Value)
 {
@@ -140,22 +102,31 @@ void APathTracingRecordCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+void APathTracingRecordCharacter::UpdateReplayCamera(float deltaTime,APlayerController* playerController)
+{
+}
 
+FVector APathTracingRecordCharacter::GetCameraLocation()
+{
+	return m_replicatedCameraWorldLocation;
+}
+
+
+FRotator APathTracingRecordCharacter::GetCameraRotation()
+{
+	return m_replicatedCameraWorldRotation;
+}
 
 void APathTracingRecordCharacter::MulticastUpdate_Implementation()
 {
-	m_replicatedCameraTransform = FollowCamera->GetComponentTransform();
-}
-
-FTransform APathTracingRecordCharacter::GetRecordedCameraTransform()
-{
-	return m_replicatedCameraTransform;
+	m_replicatedCameraWorldLocation = FollowCamera->GetComponentLocation();
+	m_replicatedCameraWorldRotation = FollowCamera->GetComponentRotation();
 }
 
 void APathTracingRecordCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(APathTracingRecordCharacter, m_replicatedCameraTransform);//replicated처리할거라고 등록
-
+	DOREPLIFETIME(APathTracingRecordCharacter, m_replicatedCameraWorldLocation);//replicated처리할거라고 등록
+	DOREPLIFETIME(APathTracingRecordCharacter, m_replicatedCameraWorldRotation);
 }

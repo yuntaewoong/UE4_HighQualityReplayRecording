@@ -18,6 +18,7 @@ class APathTracingRecordCharacter : public ACharacter
 	/** Follow camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class UCameraComponent* FollowCamera;
+
 public:
 	APathTracingRecordCharacter();
 
@@ -29,35 +30,21 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category=Camera)
 	float BaseLookUpRate;
 
-protected:
 
-	/** Resets HMD orientation in VR. */
-	void OnResetVR();
+	UFUNCTION(BlueprintCallable)
+		FVector GetCameraLocation();
+
+	UFUNCTION(BlueprintCallable)
+		FRotator GetCameraRotation();
+
+protected:
+	
 
 	/** Called for forwards/backward input */
 	void MoveForward(float Value);
 
 	/** Called for side to side input */
 	void MoveRight(float Value);
-
-	/** 
-	 * Called via input to turn at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void TurnAtRate(float Rate);
-
-	/**
-	 * Called via input to turn look up/down at a given rate. 
-	 * @param Rate	This is a normalized rate, i.e. 1.0 means 100% of desired turn rate
-	 */
-	void LookUpAtRate(float Rate);
-
-	/** Handler for when a touch input begins. */
-	void TouchStarted(ETouchIndex::Type FingerIndex, FVector Location);
-
-	/** Handler for when a touch input stops. */
-	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
-
 protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -70,17 +57,24 @@ public:
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	
+	
 
 private:
+
 	UPROPERTY(Replicated)
-		FTransform m_replicatedCameraTransform;//replay데이터에 저장될 카메라 world space 트랜스폼값
-	
+		FVector m_replicatedCameraWorldLocation;
+	UPROPERTY(Replicated)
+		FRotator m_replicatedCameraWorldRotation;
+
 	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
 		void MulticastUpdate();//replicate데이터를 업데이트
+	UFUNCTION(BlueprintCallable)
+		void UpdateReplayCamera(float deltaTime,APlayerController* playerController);//spectator pawn카메라를 기록된 카메라 transform으로 업데이트
+	
+	
+
 	void MulticastUpdate_Implementation();
 
-	UFUNCTION(BlueprintCallable)
-		FTransform GetRecordedCameraTransform();
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;//replicate된 변수등록절차
 
