@@ -18,7 +18,7 @@ void ARecordingManager::SetIsRecording(bool isRecording)
 	m_IsRecording = isRecording;
 }
 
-TArray<FString> ARecordingManager::GetReplayFileNames()
+TArray<FString> ARecordingManager::GetReplayFileNameStrings()
 {
     TArray<FString> fileNames= TArray<FString>();//결과 FString배열
 	IPlatformFile& FileManager = FPlatformFileManager::Get().GetPlatformFile();//언리얼 file system레퍼런스

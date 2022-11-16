@@ -26,7 +26,7 @@ public:
 		void SetIsRecording(bool isRecording);
 
 	UFUNCTION(BlueprintCallable)
-		TArray<FString> GetReplayFileNames();// 프로젝트경로/Saved/Demos에 저장된 .replay파일들의 이름배열을 리턴
+		TArray<FString> GetReplayFileNameStrings();// 프로젝트경로/Saved/Demos에 저장된 .replay파일들의 이름배열을 리턴
 private:
     struct DirectoryVisitor : public IPlatformFile::FDirectoryVisitor
     {
