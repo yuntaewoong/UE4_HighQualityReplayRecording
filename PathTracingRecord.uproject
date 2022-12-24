@@ -1,6 +1,6 @@
 {
 	"FileVersion": 3,
-	"EngineAssociation": "{25734A67-4621-580A-3565-779B3B21F134}",
+	"EngineAssociation": "{B662D1BF-4592-AC28-749D-BB88A27406BB}",
 	"Category": "",
 	"Description": "",
 	"Modules": [
@@ -17,6 +17,15 @@
 		{
 			"Name": "SimpleVideoCapture",
 			"Enabled": true
+		},
+		{
+			"Name": "SteamVR",
+			"Enabled": false,
+			"SupportedTargetPlatforms": [
+				"Win32",
+				"Win64",
+				"Linux"
+			]
 		}
 	]
 }
