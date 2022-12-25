@@ -14,6 +14,7 @@ class PATHTRACINGRECORD_API AReplayPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 public:
+	AReplayPlayerController();
 	UFUNCTION(BlueprintCallable)
 		void RestartReplay();
 };

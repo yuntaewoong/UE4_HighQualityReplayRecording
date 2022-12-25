@@ -5,6 +5,16 @@
 #include "Engine/World.h"
 #include "Engine/DemoNetDriver.h"
 
+
+AReplayPlayerController::AReplayPlayerController()
+{
+	SetTickableWhenPaused(true);
+	PrimaryActorTick.bTickEvenWhenPaused = true;
+	RootComponent->SetTickableWhenPaused(true);
+	RootComponent->PrimaryComponentTick.bTickEvenWhenPaused = true;
+	bShouldPerformFullTickWhenPaused = true;
+}
+
 void AReplayPlayerController::RestartReplay()
 {
 	if (UWorld* world = GetWorld())
