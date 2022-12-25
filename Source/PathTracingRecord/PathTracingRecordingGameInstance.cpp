@@ -21,3 +21,13 @@ void UPathTracingRecordingGameInstance::StartReplay(FString replayName)
 {
 	PlayReplay(replayName, nullptr);
 }
+
+void UPathTracingRecordingGameInstance::SetCustomizingInfo(FString customizingInfo)
+{
+	mCustomizingInfo = customizingInfo;
+}
+
+FString UPathTracingRecordingGameInstance::GetCustomizingInfo()
+{
+	return mCustomizingInfo;
+}

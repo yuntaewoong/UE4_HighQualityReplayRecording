@@ -24,4 +24,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 		void StartReplay(FString replayName);//replayName.replay이름의 리플레이 재생시작
+
+	UFUNCTION(BlueprintCallable)
+		void SetCustomizingInfo(FString customizingInfo);
+
+	UFUNCTION(BlueprintCallable)
+		FString GetCustomizingInfo();
+private:
+	FString mCustomizingInfo;
 };
