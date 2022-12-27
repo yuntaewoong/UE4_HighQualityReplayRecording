@@ -35,7 +35,7 @@ public:
 		FVector GetCameraLocation();
 
 	UFUNCTION(BlueprintCallable)
-		FRotator GetCameraRotation();
+		FRotator GetCameraControlRotation();
 
 protected:
 	
@@ -67,13 +67,13 @@ private:
 		FRotator m_replicatedCameraWorldRotation;
 
 	UFUNCTION(BlueprintCallable,NetMulticast,Reliable)
-		void MulticastUpdate();//replicate데이터를 업데이트
+		void MulticastUpdate(FVector cameraLocation,FRotator cameraRotator);//replicate데이터를 업데이트
 	UFUNCTION(BlueprintCallable)
 		void UpdateReplayCamera(float deltaTime,APlayerController* playerController);//spectator pawn카메라를 기록된 카메라 transform으로 업데이트
 	
 	
 
-	void MulticastUpdate_Implementation();
+	void MulticastUpdate_Implementation(FVector cameraLocation, FRotator cameraRotator);
 
 private:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const;//replicate된 변수등록절차

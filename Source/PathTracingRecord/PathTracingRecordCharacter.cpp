@@ -112,15 +112,15 @@ FVector APathTracingRecordCharacter::GetCameraLocation()
 }
 
 
-FRotator APathTracingRecordCharacter::GetCameraRotation()
+FRotator APathTracingRecordCharacter::GetCameraControlRotation()
 {
 	return m_replicatedCameraWorldRotation;
 }
 
-void APathTracingRecordCharacter::MulticastUpdate_Implementation()
+void APathTracingRecordCharacter::MulticastUpdate_Implementation(FVector cameraLocation, FRotator cameraRotator)
 {
-	m_replicatedCameraWorldLocation = FollowCamera->GetComponentLocation();
-	m_replicatedCameraWorldRotation = FollowCamera->GetComponentRotation();
+	m_replicatedCameraWorldLocation = cameraLocation;
+	m_replicatedCameraWorldRotation = cameraRotator;
 }
 
 void APathTracingRecordCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
