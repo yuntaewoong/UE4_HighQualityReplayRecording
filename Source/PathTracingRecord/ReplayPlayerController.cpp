@@ -25,3 +25,15 @@ void AReplayPlayerController::RestartReplay()
 		}
 	}
 }
+
+bool AReplayPlayerController::IsReplayEnd()
+{
+	if (UWorld* world = GetWorld())
+	{
+		if (UDemoNetDriver* demoDriver = world->GetDemoNetDriver())
+		{
+			return demoDriver->DemoCurrentTime >= demoDriver->DemoTotalTime;
+		}
+	}
+	return false;
+}
