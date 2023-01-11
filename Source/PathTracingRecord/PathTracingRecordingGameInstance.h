@@ -16,6 +16,12 @@ class PATHTRACINGRECORD_API UPathTracingRecordingGameInstance : public UGameInst
 public:
 	UPathTracingRecordingGameInstance();
 
+	UFUNCTION(BlueprintCallable)
+		void SetFixedFramerate(int Framerate);
+
+	UFUNCTION(BlueprintCallable)
+		void SetBUseFixedFramerate(bool bUseFixed);
+
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 		void StartRecording(FString replayName);//replayName.replay이름의 리플레이 저장 시작
 
@@ -25,11 +31,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Replays")
 		void StartReplay(FString replayName);//replayName.replay이름의 리플레이 재생시작
 
-	UFUNCTION(BlueprintCallable)
-		void SetCustomizingInfo(FString customizingInfo);
-
-	UFUNCTION(BlueprintCallable)
-		FString GetCustomizingInfo();
 private:
 	FString mCustomizingInfo;
 };
