@@ -35,6 +35,8 @@
 ![](ScreenShot/ReplayCustom.png)
 - 리플레이 런타임 파라미터 조절(해상도,주사율,GI Method,캐릭터 Mesh, 시간대 커스터마이징)
 
+# 최종 결과
+![](Video/result.gif)
 
 # 참고 논문
 - [ReSTIR](https://research.nvidia.com/sites/default/files/pubs/2020-07_Spatiotemporal-reservoir-resampling/ReSTIR.pdf)
